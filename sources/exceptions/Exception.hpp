@@ -11,7 +11,7 @@ namespace fatanyu
     {
     public:
         explicit Exception(const char* message, const std::experimental::source_location& source_location = std::experimental::source_location::current());
-        ~Exception() = default;
+        ~Exception() override = default;
 
         [[nodiscard]]
         const char *what() const noexcept override

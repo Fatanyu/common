@@ -7,6 +7,9 @@
 
 namespace fatanyu
 {
+    /**
+     * Custom exception which also provides additional information via source_location
+     */
     class Exception : public std::exception
     {
     public:
@@ -20,7 +23,7 @@ namespace fatanyu
         }
 
     protected:
-        void formatMessage();
+        virtual void formatMessage();
 
         const char* m_message;
         const char* m_delimiter = ":";

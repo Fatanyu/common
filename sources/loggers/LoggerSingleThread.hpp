@@ -4,6 +4,7 @@
 #include <ostream>
 #include <iostream>
 #include <exceptions/Exception.hpp>
+#include <chrono>
 
 namespace fatanyu
 {
@@ -14,7 +15,7 @@ namespace fatanyu
         {
             if(!ostream)
             {
-                throw fatanyu::Exception("Given stream is closed.");
+                throw fatanyu::Exception("Given stream is not open.");
             }
         }
         ~LoggerSingleThread() = default;
@@ -52,7 +53,8 @@ namespace fatanyu
     protected:
         void print(const char *message, const std::experimental::source_location &source_location, const char* severityLevel) noexcept
         {
-            m_ostream << formatCollumn(severityLevel) <<
+            m_ostream << formatCollumn(currentTime().c_str()) <<
+                      formatCollumn(severityLevel) <<
                       formatCollumn(source_location.file_name()) <<
                       formatCollumn(source_location.line()) <<
                       formatCollumn(source_location.column()) <<
@@ -60,14 +62,25 @@ namespace fatanyu
                       formatCollumn(message) << std::endl;
         }
 
+        static std::string currentTime()
+        {
+            const int bufferSize = 20;
+            char buffer[bufferSize];
+            std::time_t timeNow = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+            strftime(buffer, bufferSize, "%F %X", localtime(&timeNow));
+            return buffer;
+        }
+
         static std::string formatCollumn(const char* value)
         {
             return std::string("[").append(value).append("]");
         }
+
         static std::string formatCollumn(int value)
         {
             return std::string("[").append(std::to_string(value)).append("]");
         }
+
         std::ostream &m_ostream;
     };
 }

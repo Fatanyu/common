@@ -45,6 +45,7 @@ namespace fatanyu
         std::string result = stringstream.str();
         auto dummySourceLocation = fatanyu::dummy_source_location();
         std::stringstream wantedLine;
+        // column date && time is not part of check
         wantedLine << fatanyu::formatCollumn(messageType.c_str())
                     << fatanyu::formatCollumn(dummySourceLocation.file_name())
                     << fatanyu::formatCollumn(dummySourceLocation.line())
@@ -52,7 +53,7 @@ namespace fatanyu
                     << fatanyu::formatCollumn(dummySourceLocation.function_name())
                     << fatanyu::formatCollumn(messageToLog.c_str())
                     << std::endl;
-        ASSERT_EQ(wantedLine.str(), result);
+        EXPECT_NE(result.find(wantedLine.str()), std::string::npos);
     }
 }
 

@@ -23,7 +23,7 @@ namespace fatanyu
         }
 
     protected:
-        virtual void formatMessage();
+        void formatMessage();
 
         const char* m_message;
         const char* m_delimiter = ":";

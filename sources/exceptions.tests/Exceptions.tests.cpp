@@ -38,7 +38,7 @@ TEST(Exception, RaiseException)
 
 TEST(Exception, Message)
 {
-    std::string errorMessage = "Here we have some error to solve.";
+    const std::string errorMessage = "Here we have some error to solve.";
     try
     {
         throw fatanyu::Exception(errorMessage.c_str());

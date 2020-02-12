@@ -56,7 +56,7 @@ namespace fatanyu
             m_ostream << formatColumn(currentTime().c_str()) <<
                       formatColumn(severityLevel) <<
                       formatColumn(source_location.file_name()) <<
-                                                                formatColumn(source_location.line()) <<
+                      formatColumn(source_location.line()) <<
                       formatColumn(source_location.column()) <<
                       formatColumn(source_location.function_name()) <<
                       formatColumn(message) << std::endl;

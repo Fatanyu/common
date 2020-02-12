@@ -6,11 +6,11 @@
 
 namespace fatanyu
 {
-    std::string formatCollumn(const char* value)
+    std::string formatColumn(const char* value)
     {
         return std::string("[").append(value).append("]");
     }
-    std::string formatCollumn(int value)
+    std::string formatColumn(int value)
     {
         return std::string("[").append(std::to_string(value)).append("]");
     }
@@ -31,8 +31,8 @@ namespace fatanyu
         EXPECT_NO_THROW(logMessage(loggerSingleThread));
         std::string result = stringstream.str();
 
-        EXPECT_NE(result.find(fatanyu::formatCollumn(messageToLog.c_str())), std::string::npos);
-        EXPECT_NE(result.find(fatanyu::formatCollumn(messageType.c_str())), std::string::npos);
+        EXPECT_NE(result.find(fatanyu::formatColumn(messageToLog.c_str())), std::string::npos);
+        EXPECT_NE(result.find(fatanyu::formatColumn(messageType.c_str())), std::string::npos);
     }
 
     void testAdvancedLog(const std::string &messageToLog, const std::string &messageType,
@@ -46,12 +46,12 @@ namespace fatanyu
         auto dummySourceLocation = fatanyu::dummy_source_location();
         std::stringstream wantedLine;
         // column date && time is not part of check
-        wantedLine << fatanyu::formatCollumn(messageType.c_str())
-                    << fatanyu::formatCollumn(dummySourceLocation.file_name())
-                    << fatanyu::formatCollumn(dummySourceLocation.line())
-                    << fatanyu::formatCollumn(dummySourceLocation.column())
-                    << fatanyu::formatCollumn(dummySourceLocation.function_name())
-                    << fatanyu::formatCollumn(messageToLog.c_str())
+        wantedLine << fatanyu::formatColumn(messageType.c_str())
+                    << fatanyu::formatColumn(dummySourceLocation.file_name())
+                    << fatanyu::formatColumn(dummySourceLocation.line())
+                    << fatanyu::formatColumn(dummySourceLocation.column())
+                    << fatanyu::formatColumn(dummySourceLocation.function_name())
+                    << fatanyu::formatColumn(messageToLog.c_str())
                     << std::endl;
         EXPECT_NE(result.find(wantedLine.str()), std::string::npos);
     }

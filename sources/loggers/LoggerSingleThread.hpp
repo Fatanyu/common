@@ -53,13 +53,13 @@ namespace fatanyu
     protected:
         void print(const char *message, const std::experimental::source_location &source_location, const char* severityLevel) noexcept
         {
-            m_ostream << formatCollumn(currentTime().c_str()) <<
-                      formatCollumn(severityLevel) <<
-                      formatCollumn(source_location.file_name()) <<
-                      formatCollumn(source_location.line()) <<
-                      formatCollumn(source_location.column()) <<
-                      formatCollumn(source_location.function_name()) <<
-                      formatCollumn(message) << std::endl;
+            m_ostream << formatColumn(currentTime().c_str()) <<
+                      formatColumn(severityLevel) <<
+                      formatColumn(source_location.file_name()) <<
+                                                                formatColumn(source_location.line()) <<
+                      formatColumn(source_location.column()) <<
+                      formatColumn(source_location.function_name()) <<
+                      formatColumn(message) << std::endl;
         }
 
         static std::string currentTime()
@@ -71,12 +71,12 @@ namespace fatanyu
             return buffer;
         }
 
-        static std::string formatCollumn(const char* value)
+        static std::string formatColumn(const char* value)
         {
             return std::string("[").append(value).append("]");
         }
 
-        static std::string formatCollumn(int value)
+        static std::string formatColumn(int value)
         {
             return std::string("[").append(std::to_string(value)).append("]");
         }

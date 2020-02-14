@@ -3,15 +3,8 @@
 
 TEST(Exception, Constructor)
 {
-    try
-    {
-        fatanyu::Exception customException("Somethings is wrong");
-        fatanyu::Exception customException2("Somethings is wrong", {});
-    }
-    catch (std::exception &exception)
-    {
-        FAIL();
-    }
+    EXPECT_NO_THROW(fatanyu::Exception customException("Somethings is wrong"));
+    EXPECT_NO_THROW(fatanyu::Exception customException2("Somethings is wrong", {}));
 }
 TEST(Exception, RaiseException)
 {

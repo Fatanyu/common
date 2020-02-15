@@ -13,6 +13,10 @@ include_directories(../../sources)
 # 'Google_Tests_run' is the target name
 # 'test1.cpp tests2.cpp' are source files with tests
 #add_executable(Google_Tests_run test1.cpp tests2.cpp) ### original file
-add_executable(google-tests-run dummy-test.cpp ../../sources/exceptions.tests/Exceptions.tests.cpp ../../sources/loggers.tests/LoggerSingleThread.tests.cpp) ### put here all test files
+add_executable(google-tests-run dummy-test.cpp ../../sources/exceptions.tests/Exceptions.tests.cpp
+        ../../sources/loggers.tests/LoggerSingleThread.tests.cpp
+        ../../sources/loggers.tests/LoggerMultiThread.test.cpp
+        ../../sources/loggers.tests/LoggerTestFunctions.test.hpp
+        ../../sources/loggers.tests/LoggerTestFunctions.test.cpp) ### put here all test files
 
 target_link_libraries(google-tests-run gtest gtest_main exception logger-single-thread)

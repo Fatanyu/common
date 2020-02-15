@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+
+#include "LoggerTestFunctions.test.hpp"
 #include <loggers/LoggerSingleThread.hpp>
 
 #include <ostream>
@@ -6,57 +8,8 @@
 
 namespace fatanyu
 {
-    std::string formatColumn(const char* value)
-    {
-        return std::string("[").append(value).append("]");
-    }
-    std::string formatColumn(int value)
-    {
-        return std::string("[").append(std::to_string(value)).append("]");
-    }
-    std::experimental::source_location dummy_source_location() noexcept
-    {
-        return std::experimental::source_location::current("dummy-file-name.cpp",
-                                                           "myDummyFunctionName",
-                                                           42,
-                                                           0);
-    }
 
-    void testDefaultLog(const std::string &messageToLog, const std::string &messageType,
-                        const std::function<void(fatanyu::LoggerSingleThread &loggerSingleThread)>& logMessage)
-    {
-        std::stringstream stringstream;
-        fatanyu::LoggerSingleThread loggerSingleThread(stringstream);
-
-        EXPECT_NO_THROW(logMessage(loggerSingleThread));
-        std::string result = stringstream.str();
-
-        EXPECT_NE(result.find(fatanyu::formatColumn(messageToLog.c_str())), std::string::npos);
-        EXPECT_NE(result.find(fatanyu::formatColumn(messageType.c_str())), std::string::npos);
-    }
-
-    void testAdvancedLog(const std::string &messageToLog, const std::string &messageType,
-                         const std::function<void(fatanyu::LoggerSingleThread &loggerSingleThread)>& logMessage)
-    {
-        std::stringstream stringstream;
-        fatanyu::LoggerSingleThread loggerSingleThread(stringstream);
-
-        EXPECT_NO_THROW(logMessage(loggerSingleThread));
-        std::string result = stringstream.str();
-        auto dummySourceLocation = fatanyu::dummy_source_location();
-        std::stringstream wantedLine;
-        // column date && time is not part of check
-        wantedLine << fatanyu::formatColumn(messageType.c_str())
-                    << fatanyu::formatColumn(dummySourceLocation.file_name())
-                    << fatanyu::formatColumn(dummySourceLocation.line())
-                    << fatanyu::formatColumn(dummySourceLocation.column())
-                    << fatanyu::formatColumn(dummySourceLocation.function_name())
-                    << fatanyu::formatColumn(messageToLog.c_str())
-                    << std::endl;
-        EXPECT_NE(result.find(wantedLine.str()), std::string::npos);
-    }
 }
-
 
 TEST(LoggerSingleThread, Constructor)
 {
@@ -81,7 +34,7 @@ TEST(LoggerSingleThread, trace)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.trace(messageToLog.c_str());
     });
 
@@ -89,7 +42,7 @@ TEST(LoggerSingleThread, trace)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.trace(messageToLog.c_str(), fatanyu::dummy_source_location());
     });
 }
@@ -102,7 +55,7 @@ TEST(LoggerSingleThread, debug)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.debug(messageToLog.c_str());
     });
 
@@ -110,7 +63,7 @@ TEST(LoggerSingleThread, debug)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.debug(messageToLog.c_str(), fatanyu::dummy_source_location());
     });
 }
@@ -123,7 +76,7 @@ TEST(LoggerSingleThread, info)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.info(messageToLog.c_str());
     });
 
@@ -131,7 +84,7 @@ TEST(LoggerSingleThread, info)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.info(messageToLog.c_str(), fatanyu::dummy_source_location());
     });
 }
@@ -144,7 +97,7 @@ TEST(LoggerSingleThread, warning)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.warning(messageToLog.c_str());
     });
 
@@ -153,7 +106,7 @@ TEST(LoggerSingleThread, warning)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.warning(messageToLog.c_str(), fatanyu::dummy_source_location());
     });
 }
@@ -166,7 +119,7 @@ TEST(LoggerSingleThread, error)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.error(messageToLog.c_str());
     });
 
@@ -174,7 +127,7 @@ TEST(LoggerSingleThread, error)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.error(messageToLog.c_str(), fatanyu::dummy_source_location());
     });
 }
@@ -187,7 +140,7 @@ TEST(LoggerSingleThread, critical)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.critical(messageToLog.c_str());
     });
 
@@ -195,7 +148,7 @@ TEST(LoggerSingleThread, critical)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
         logger.critical(messageToLog.c_str(), fatanyu::dummy_source_location());
     });
 }

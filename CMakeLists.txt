@@ -10,7 +10,8 @@ include_directories(sources)
 
 add_library(exception STATIC sources/exceptions/Exception.hpp sources/exceptions/Exception.cpp)
 #set_target_properties(exception PROPERTIES LINKER_LANGUAGE CXX) ### uncomment when no cpp file is in the library
-add_library(logger-single-thread STATIC sources/exceptions/Exception.hpp sources/loggers/LoggerSingleThread.cpp)
+add_library(logger-single-thread STATIC sources/loggers/LoggerSingleThread.hpp sources/loggers/LoggerSingleThread.cpp)
+add_library(logger-multi-thread STATIC sources/loggers/LoggerMultiThread.cpp sources/loggers/LoggerMultiThread.hpp)
 
 add_subdirectory(external-libraries/google-tests)
 include_directories(external-libraries/google-tests/googletest/googletest/include)

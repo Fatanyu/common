@@ -1,7 +1,7 @@
 #include "Exception.hpp"
 
 
-namespace fatanyu
+namespace kaktus
 {
 
     Exception::Exception(const char *message, const std::experimental::source_location &source_location): m_source_location(source_location)

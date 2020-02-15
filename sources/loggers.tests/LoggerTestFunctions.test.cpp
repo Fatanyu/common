@@ -1,6 +1,6 @@
 #include "LoggerTestFunctions.test.hpp"
 
-namespace fatanyu
+namespace kaktus
 {
     std::string formatColumn(const char *value)
     {
@@ -20,7 +20,7 @@ namespace fatanyu
                                                            0);
     }
 
-    void testThreadMainFunction(unsigned int iterationLimit, fatanyu::LoggerMultiThread &genericLogger, const std::function<void(fatanyu::LoggerMultiThread &genericLogger, const std::string &messageToLog)>& logMessage)
+    void testThreadMainFunction(unsigned int iterationLimit, kaktus::LoggerMultiThread &genericLogger, const std::function<void(kaktus::LoggerMultiThread &genericLogger, const std::string &messageToLog)>& logMessage)
     {
         std::string messageToLog("some message");
         for(unsigned int current = 0; current < iterationLimit; current++)

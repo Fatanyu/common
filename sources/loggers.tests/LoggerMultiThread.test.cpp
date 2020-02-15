@@ -12,12 +12,12 @@ TEST(LoggerMultiThread, Constructor)
     std::ofstream ofstream("someFile", std::ios::out);
     std::ofstream emptyOfstream("", std::ios::out);
 
-    EXPECT_NO_THROW(fatanyu::LoggerMultiThread loggerMultiThread(stringstream));
-    EXPECT_NO_THROW(fatanyu::LoggerMultiThread loggerMultiThread);
-    EXPECT_NO_THROW(fatanyu::LoggerMultiThread loggerMultiThread(std::cerr));
-    EXPECT_NO_THROW(fatanyu::LoggerMultiThread loggerMultiThread(ofstream));
-    EXPECT_THROW(fatanyu::LoggerMultiThread loggerMultiThread(emptyOfstream), fatanyu::Exception);
-    EXPECT_THROW(fatanyu::LoggerMultiThread loggerMultiThread(emptyOfstream), std::exception);
+    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread(stringstream));
+    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread);
+    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread(std::cerr));
+    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread(ofstream));
+    EXPECT_THROW(kaktus::LoggerMultiThread loggerMultiThread(emptyOfstream), kaktus::Exception);
+    EXPECT_THROW(kaktus::LoggerMultiThread loggerMultiThread(emptyOfstream), std::exception);
 
 }
 
@@ -29,7 +29,7 @@ TEST(LoggerMultiThread, trace)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
         logger.trace(messageToLog.c_str());
     });
 
@@ -37,8 +37,8 @@ TEST(LoggerMultiThread, trace)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
-        logger.trace(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
+        logger.trace(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -50,7 +50,7 @@ TEST(LoggerMultiThread, debug)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
         logger.debug(messageToLog.c_str());
     });
 
@@ -58,8 +58,8 @@ TEST(LoggerMultiThread, debug)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
-        logger.debug(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
+        logger.debug(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -71,7 +71,7 @@ TEST(LoggerMultiThread, info)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
         logger.info(messageToLog.c_str());
     });
 
@@ -79,8 +79,8 @@ TEST(LoggerMultiThread, info)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
-        logger.info(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
+        logger.info(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -92,7 +92,7 @@ TEST(LoggerMultiThread, warning)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
         logger.warning(messageToLog.c_str());
     });
 
@@ -101,8 +101,8 @@ TEST(LoggerMultiThread, warning)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
-        logger.warning(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
+        logger.warning(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -114,7 +114,7 @@ TEST(LoggerMultiThread, error)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
         logger.error(messageToLog.c_str());
     });
 
@@ -122,8 +122,8 @@ TEST(LoggerMultiThread, error)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
-        logger.error(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
+        logger.error(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -135,7 +135,7 @@ TEST(LoggerMultiThread, critical)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
         logger.critical(messageToLog.c_str());
     });
 
@@ -143,8 +143,8 @@ TEST(LoggerMultiThread, critical)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerMultiThread>(messageToLog, messageType, [&](fatanyu::LoggerMultiThread &logger) {
-        logger.critical(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerMultiThread>(messageToLog, messageType, [&](kaktus::LoggerMultiThread &logger) {
+        logger.critical(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -152,44 +152,44 @@ TEST(LoggerMultiThread, multipleThreads)
 {
     const unsigned int iterationLimit = 100; //higher count with bad or without mutex can cause crash
     std::stringstream sstream;
-    fatanyu::LoggerMultiThread logger(sstream);
+    kaktus::LoggerMultiThread logger(sstream);
 
     //
     // Prepare lambdas for threads
     //
 
     auto criticalLambda([&]() -> void {
-        fatanyu::testThreadMainFunction(iterationLimit, logger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+        kaktus::testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
             logger.critical(messageToLog.c_str());
         });
     });
 
     auto errorLambda([&]() -> void {
-        fatanyu::testThreadMainFunction(iterationLimit, logger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+        kaktus::testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
             logger.error(messageToLog.c_str());
         });
     });
 
     auto warningLambda([&]() -> void {
-        fatanyu::testThreadMainFunction(iterationLimit, logger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+        kaktus::testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
             logger.warning(messageToLog.c_str());
         });
     });
 
     auto infoLambda([&]() -> void {
-        fatanyu::testThreadMainFunction(iterationLimit, logger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+        kaktus::testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
             logger.info(messageToLog.c_str());
         });
     });
 
     auto debugLambda([&]() -> void {
-        fatanyu::testThreadMainFunction(iterationLimit, logger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+        kaktus::testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
             logger.debug(messageToLog.c_str());
         });
     });
 
     auto traceLambda([&]() -> void {
-        fatanyu::testThreadMainFunction(iterationLimit, logger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+        kaktus::testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
             logger.trace(messageToLog.c_str());
         });
     });
@@ -199,43 +199,43 @@ TEST(LoggerMultiThread, multipleThreads)
     //
 
     std::stringstream singleLine;
-    fatanyu::LoggerMultiThread testerLogger(singleLine);
-    fatanyu::testThreadMainFunction(1, testerLogger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+    kaktus::LoggerMultiThread testerLogger(singleLine);
+    kaktus::testThreadMainFunction(1, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
         logger.critical(messageToLog.c_str());
     });
 
     unsigned int charactersInSingleCriticalLine = singleLine.str().length();
     singleLine.str(std::string());
 
-    fatanyu::testThreadMainFunction(1, testerLogger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+    kaktus::testThreadMainFunction(1, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
         logger.error(messageToLog.c_str());
     });
 
     unsigned int charactersInSingleErrorLine = singleLine.str().length();
     singleLine.str(std::string());
 
-    fatanyu::testThreadMainFunction(1, testerLogger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+    kaktus::testThreadMainFunction(1, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
         logger.warning(messageToLog.c_str());
     });
 
     unsigned int charactersInSingleWarningLine = singleLine.str().length();
     singleLine.str(std::string());
 
-    fatanyu::testThreadMainFunction(1, testerLogger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+    kaktus::testThreadMainFunction(1, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
         logger.info(messageToLog.c_str());
     });
 
     unsigned int charactersInSingleInfoLine = singleLine.str().length();
     singleLine.str(std::string());
 
-    fatanyu::testThreadMainFunction(1, testerLogger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+    kaktus::testThreadMainFunction(1, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
         logger.debug(messageToLog.c_str());
     });
 
     unsigned int charactersInSingleDebugLine = singleLine.str().length();
     singleLine.str(std::string());
 
-    fatanyu::testThreadMainFunction(1, testerLogger, [&](fatanyu::LoggerMultiThread &logger, const std::string &messageToLog) {
+    kaktus::testThreadMainFunction(1, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &messageToLog) {
         logger.trace(messageToLog.c_str());
     });
 

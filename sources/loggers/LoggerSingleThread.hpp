@@ -6,7 +6,7 @@
 #include <exceptions/Exception.hpp>
 #include <chrono>
 
-namespace fatanyu
+namespace kaktus
 {
     class LoggerSingleThread
     {
@@ -15,7 +15,7 @@ namespace fatanyu
         {
             if(!ostream)
             {
-                throw fatanyu::Exception("Given stream is not open.");
+                throw kaktus::Exception("Given stream is not open.");
             }
         }
         ~LoggerSingleThread() = default;

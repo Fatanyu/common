@@ -8,7 +8,7 @@
 #include <mutex>
 #include <thread>
 
-namespace fatanyu
+namespace kaktus
 {
     class LoggerMultiThread
     {
@@ -56,7 +56,7 @@ namespace fatanyu
             {
                 if(!ostream)
                 {
-                    throw fatanyu::Exception("Given stream is not open.");
+                    throw kaktus::Exception("Given stream is not open.");
                 }
             }
 
@@ -94,6 +94,6 @@ namespace fatanyu
             std::mutex m_streamMutex;
         };
 
-        fatanyu::LoggerMultiThread::MultiThreadStreamWrapper m_stream;
+        kaktus::LoggerMultiThread::MultiThreadStreamWrapper m_stream;
     };
 }

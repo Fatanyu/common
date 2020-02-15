@@ -5,7 +5,7 @@
 #include <experimental/source_location>
 #include <sstream>
 
-namespace fatanyu
+namespace kaktus
 {
     /**
      * Custom exception which also provides additional information via source_location

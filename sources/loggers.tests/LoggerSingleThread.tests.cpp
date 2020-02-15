@@ -6,7 +6,7 @@
 #include <ostream>
 #include <fstream>
 
-namespace fatanyu
+namespace kaktus
 {
 
 }
@@ -17,12 +17,12 @@ TEST(LoggerSingleThread, Constructor)
     std::ofstream ofstream("someFile", std::ios::out);
     std::ofstream emptyOfstream("", std::ios::out);
 
-    EXPECT_NO_THROW(fatanyu::LoggerSingleThread loggerSingleThread(stringstream));
-    EXPECT_NO_THROW(fatanyu::LoggerSingleThread loggerSingleThread);
-    EXPECT_NO_THROW(fatanyu::LoggerSingleThread loggerSingleThread(std::cerr));
-    EXPECT_NO_THROW(fatanyu::LoggerSingleThread loggerSingleThread(ofstream));
-    EXPECT_THROW(fatanyu::LoggerSingleThread loggerSingleThread(emptyOfstream), fatanyu::Exception);
-    EXPECT_THROW(fatanyu::LoggerSingleThread loggerSingleThread(emptyOfstream), std::exception);
+    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread(stringstream));
+    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread);
+    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread(std::cerr));
+    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread(ofstream));
+    EXPECT_THROW(kaktus::LoggerSingleThread loggerSingleThread(emptyOfstream), kaktus::Exception);
+    EXPECT_THROW(kaktus::LoggerSingleThread loggerSingleThread(emptyOfstream), std::exception);
 
 }
 
@@ -34,7 +34,7 @@ TEST(LoggerSingleThread, trace)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
         logger.trace(messageToLog.c_str());
     });
 
@@ -42,8 +42,8 @@ TEST(LoggerSingleThread, trace)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
-        logger.trace(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
+        logger.trace(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -55,7 +55,7 @@ TEST(LoggerSingleThread, debug)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
         logger.debug(messageToLog.c_str());
     });
 
@@ -63,8 +63,8 @@ TEST(LoggerSingleThread, debug)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
-        logger.debug(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
+        logger.debug(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -76,7 +76,7 @@ TEST(LoggerSingleThread, info)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
         logger.info(messageToLog.c_str());
     });
 
@@ -84,8 +84,8 @@ TEST(LoggerSingleThread, info)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
-        logger.info(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
+        logger.info(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -97,7 +97,7 @@ TEST(LoggerSingleThread, warning)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
         logger.warning(messageToLog.c_str());
     });
 
@@ -106,8 +106,8 @@ TEST(LoggerSingleThread, warning)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
-        logger.warning(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
+        logger.warning(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -119,7 +119,7 @@ TEST(LoggerSingleThread, error)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
         logger.error(messageToLog.c_str());
     });
 
@@ -127,8 +127,8 @@ TEST(LoggerSingleThread, error)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
-        logger.error(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
+        logger.error(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }
 
@@ -140,7 +140,7 @@ TEST(LoggerSingleThread, critical)
     //
     // Default logging
     //
-    fatanyu::testDefaultLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
+    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
         logger.critical(messageToLog.c_str());
     });
 
@@ -148,7 +148,7 @@ TEST(LoggerSingleThread, critical)
     // Full logging with mocking source_location
     //
 
-    fatanyu::testAdvancedLog<fatanyu::LoggerSingleThread>(messageToLog, messageType, [&](fatanyu::LoggerSingleThread &logger) {
-        logger.critical(messageToLog.c_str(), fatanyu::dummy_source_location());
+    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
+        logger.critical(messageToLog.c_str(), kaktus::dummy_source_location());
     });
 }

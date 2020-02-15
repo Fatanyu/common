@@ -9,7 +9,7 @@
 #include <loggers/LoggerMultiThread.hpp>
 
 
-namespace fatanyu
+namespace kaktus
 {
     std::string formatColumn(const char* value);
     std::string formatColumn(int value);
@@ -27,8 +27,8 @@ namespace fatanyu
         std::string result = stringstream.str();
 
         std::cout << result << std::endl;
-        EXPECT_NE(result.find(fatanyu::formatColumn(messageToLog.c_str())), std::string::npos);
-        EXPECT_NE(result.find(fatanyu::formatColumn(messageType.c_str())), std::string::npos);
+        EXPECT_NE(result.find(kaktus::formatColumn(messageToLog.c_str())), std::string::npos);
+        EXPECT_NE(result.find(kaktus::formatColumn(messageType.c_str())), std::string::npos);
     }
 
     template <typename GenericLogger>
@@ -40,18 +40,18 @@ namespace fatanyu
 
         EXPECT_NO_THROW(logMessage(genericLogger));
         std::string result = stringstream.str();
-        auto dummySourceLocation = fatanyu::dummy_source_location();
+        auto dummySourceLocation = kaktus::dummy_source_location();
         std::stringstream wantedLine;
         // column date && time is not part of check
-        wantedLine << fatanyu::formatColumn(messageType.c_str())
-                   << fatanyu::formatColumn(dummySourceLocation.file_name())
-                   << fatanyu::formatColumn(dummySourceLocation.line())
-                   << fatanyu::formatColumn(dummySourceLocation.column())
-                   << fatanyu::formatColumn(dummySourceLocation.function_name())
-                   << fatanyu::formatColumn(messageToLog.c_str())
+        wantedLine << kaktus::formatColumn(messageType.c_str())
+                   << kaktus::formatColumn(dummySourceLocation.file_name())
+                   << kaktus::formatColumn(dummySourceLocation.line())
+                   << kaktus::formatColumn(dummySourceLocation.column())
+                   << kaktus::formatColumn(dummySourceLocation.function_name())
+                   << kaktus::formatColumn(messageToLog.c_str())
                    << std::endl;
         EXPECT_NE(result.find(wantedLine.str()), std::string::npos);
     }
 
-    void testThreadMainFunction(unsigned int iterationLimit, fatanyu::LoggerMultiThread &genericLogger, const std::function<void(fatanyu::LoggerMultiThread &genericLogger, const std::string &messageToLog)>& logMessage);
+    void testThreadMainFunction(unsigned int iterationLimit, kaktus::LoggerMultiThread &genericLogger, const std::function<void(kaktus::LoggerMultiThread &genericLogger, const std::string &messageToLog)>& logMessage);
 }

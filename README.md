@@ -14,13 +14,13 @@
 
 ## What
 - Code is written by CLion, some files are only CLion specific
-- Default enviroment is Linux Mint
+- Default environment is Linux Mint, should works elsewhere (may have problems on Windows - see std:wstring vs std::string)
 - Code will be static libraries
 - Unit test will be done by google tests - see https://github.com/google/googletest
 - Custom exceptions
 - Custom loggers for
     - single thread
-    - multithread (**TODO**)
+    - multithread
     - multiprocess (**TODO**)
 - Template version (**TODO**)
 - Version for std::wstring  (**TODO**)

@@ -26,6 +26,7 @@ namespace fatanyu
         EXPECT_NO_THROW(logMessage(genericLogger));
         std::string result = stringstream.str();
 
+        std::cout << result << std::endl;
         EXPECT_NE(result.find(fatanyu::formatColumn(messageToLog.c_str())), std::string::npos);
         EXPECT_NE(result.find(fatanyu::formatColumn(messageType.c_str())), std::string::npos);
     }

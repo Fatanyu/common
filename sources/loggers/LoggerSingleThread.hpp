@@ -53,16 +53,17 @@ namespace fatanyu
     protected:
         void print(const char *message, const std::experimental::source_location &source_location, const char* severityLevel) noexcept
         {
-            m_ostream << formatColumn(currentTime().c_str()) <<
-                      formatColumn(severityLevel) <<
-                      formatColumn(source_location.file_name()) <<
-                      formatColumn(source_location.line()) <<
-                      formatColumn(source_location.column()) <<
-                      formatColumn(source_location.function_name()) <<
-                      formatColumn(message) << std::endl;
+            formatColumnAndPrint(currentTime().c_str());
+            formatColumnAndPrint(severityLevel);
+            formatColumnAndPrint(source_location.file_name());
+            formatColumnAndPrint(source_location.line());
+            formatColumnAndPrint(source_location.column());
+            formatColumnAndPrint(source_location.function_name());
+            formatColumnAndPrint(message);
+            m_ostream << std::endl;
         }
 
-        static std::string currentTime()
+        static std::string currentTime() noexcept
         {
             const int bufferSize = 20;
             char buffer[bufferSize];
@@ -71,16 +72,11 @@ namespace fatanyu
             return buffer;
         }
 
-        static std::string formatColumn(const char* value)
+        template <typename Streamable>
+        void formatColumnAndPrint(Streamable value) noexcept
         {
-            return std::string("[").append(value).append("]");
+            m_ostream << "[" << value << "]";
         }
-
-        static std::string formatColumn(int value)
-        {
-            return std::string("[").append(std::to_string(value)).append("]");
-        }
-
         std::ostream &m_ostream;
     };
 }

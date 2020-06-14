@@ -6,12 +6,40 @@
 #include <ostream>
 #include <fstream>
 
-namespace kaktus
+class LoggerSingleThreadFixture : public ::testing::Test
 {
+protected:
+    void SetUp() override
+    {
 
-}
+    }
 
-TEST(LoggerSingleThread, Constructor)
+    void TearDown() override
+    {
+
+    }
+
+    std::string message()
+    {
+        return kaktus::to_string(m_severityLevel).append(" message");
+    }
+
+    void severity(kaktus::SeverityLevel severityLevel)
+    {
+        m_severityLevel = severityLevel;
+    }
+
+    auto severity()
+    {
+        return m_severityLevel;
+    }
+
+    kaktus::SeverityLevel m_severityLevel = kaktus::SeverityLevel::trace;
+
+};
+
+
+TEST_F(LoggerSingleThreadFixture, Constructor)
 {
     std::stringstream stringstream;
     std::ofstream ofstream("someFile", std::ios::out);
@@ -26,129 +54,147 @@ TEST(LoggerSingleThread, Constructor)
 
 }
 
-TEST(LoggerSingleThread, trace)
+TEST_F(LoggerSingleThreadFixture, trace)
 {
-    std::string messageToLog("tracing message");
-    std::string messageType("trace");
-
+    severity(kaktus::SeverityLevel::trace);
     //
     // Default logging
     //
-    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.trace(messageToLog.c_str());
-    });
+    testDefaultLog<kaktus::LoggerSingleThread>(message(),
+                                               severity(),
+                                               [&](kaktus::LoggerSingleThread &logger) {
+                logger.trace(message());
+            });
 
     //
     // Full logging with mocking source_location
     //
 
-    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.trace(messageToLog.c_str(), kaktus::dummy_source_location());
-    });
+    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
+                                                severity(),
+                                                [&](kaktus::LoggerSingleThread &logger) {
+                logger.trace(message(), dummy_source_location());
+            });
 }
 
-TEST(LoggerSingleThread, debug)
+TEST_F(LoggerSingleThreadFixture, debug)
 {
-    std::string messageToLog("debugging message");
-    std::string messageType("debug");
+    severity(kaktus::SeverityLevel::debug);
 
     //
     // Default logging
     //
-    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.debug(messageToLog.c_str());
-    });
+    testDefaultLog<kaktus::LoggerSingleThread>(message(),
+                                                severity(),
+                                                [&](kaktus::LoggerSingleThread &logger) {
+                logger.debug(message());
+            });
 
     //
     // Full logging with mocking source_location
     //
 
-    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.debug(messageToLog.c_str(), kaktus::dummy_source_location());
-    });
+    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
+                                                severity(),
+                                                [&](kaktus::LoggerSingleThread &logger) {
+                logger.debug(message(), dummy_source_location());
+            });
 }
 
-TEST(LoggerSingleThread, info)
+TEST_F(LoggerSingleThreadFixture, info)
 {
-    std::string messageToLog("info message");
-    std::string messageType("info");
+    severity(kaktus::SeverityLevel::info);
+
 
     //
     // Default logging
     //
-    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.info(messageToLog.c_str());
-    });
+    testDefaultLog<kaktus::LoggerSingleThread>(message(),
+                                               severity(),
+                                               [&](kaktus::LoggerSingleThread &logger) {
+                logger.info(message());
+            });
 
     //
     // Full logging with mocking source_location
     //
 
-    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.info(messageToLog.c_str(), kaktus::dummy_source_location());
-    });
+    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
+                                                severity(),
+                                                [&](kaktus::LoggerSingleThread &logger) {
+                logger.info(message(), dummy_source_location());
+            });
 }
 
-TEST(LoggerSingleThread, warning)
+TEST_F(LoggerSingleThreadFixture, warning)
 {
-    std::string messageToLog("warning message");
-    std::string messageType("warning");
+    severity(kaktus::SeverityLevel::warning);
 
     //
     // Default logging
     //
-    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.warning(messageToLog.c_str());
-    });
+    testDefaultLog<kaktus::LoggerSingleThread>(message(),
+                                               severity(),
+                                               [&](kaktus::LoggerSingleThread &logger) {
+                logger.warning(message());
+            });
 
 
     //
     // Full logging with mocking source_location
     //
 
-    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.warning(messageToLog.c_str(), kaktus::dummy_source_location());
-    });
+    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
+                                                severity(),
+                                                [&](kaktus::LoggerSingleThread &logger) {
+                logger.warning(message(), dummy_source_location());
+            });
 }
 
-TEST(LoggerSingleThread, error)
+TEST_F(LoggerSingleThreadFixture, error)
 {
-    std::string messageToLog("error message");
-    std::string messageType("error");
+    severity(kaktus::SeverityLevel::error);
 
     //
     // Default logging
     //
-    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.error(messageToLog.c_str());
-    });
+    testDefaultLog<kaktus::LoggerSingleThread>(message(),
+                                               severity(),
+                                               [&](kaktus::LoggerSingleThread &logger) {
+                logger.error(message());
+            });
 
     //
     // Full logging with mocking source_location
     //
 
-    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.error(messageToLog.c_str(), kaktus::dummy_source_location());
-    });
+    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
+                                                severity(),
+                                                [&](kaktus::LoggerSingleThread &logger) {
+                logger.error(message(), dummy_source_location());
+            });
 }
 
-TEST(LoggerSingleThread, critical)
+TEST_F(LoggerSingleThreadFixture, critical)
 {
-    std::string messageToLog("critical message");
-    std::string messageType("critical");
+    severity(kaktus::SeverityLevel::critical);
 
     //
     // Default logging
     //
-    kaktus::testDefaultLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.critical(messageToLog.c_str());
-    });
+    testDefaultLog<kaktus::LoggerSingleThread>(message(),
+                                               severity(),
+                                               [&](kaktus::LoggerSingleThread &logger) {
+                logger.critical(message());
+            });
 
     //
     // Full logging with mocking source_location
     //
 
-    kaktus::testAdvancedLog<kaktus::LoggerSingleThread>(messageToLog, messageType, [&](kaktus::LoggerSingleThread &logger) {
-        logger.critical(messageToLog.c_str(), kaktus::dummy_source_location());
-    });
+    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
+                                                severity(),
+                                                [&](kaktus::LoggerSingleThread &logger) {
+                logger.critical(message(), dummy_source_location());
+            });
 }

@@ -1,9 +1,13 @@
 #pragma once
 
+#include <mutex-wrappers/WrapperWithMutex.hpp>
+#include <exceptions/Exception.hpp>
+#include "SeverityLevel.hpp"
+#include "LoggerFunctions.hpp"
+
 #include <experimental/source_location>
 #include <ostream>
 #include <iostream>
-#include <exceptions/Exception.hpp>
 #include <chrono>
 #include <mutex>
 #include <thread>
@@ -17,81 +21,74 @@ namespace kaktus
         {}
         ~LoggerMultiThread() = default;
 
-        void trace(const char *message, const std::experimental::source_location &source_location = std::experimental::source_location::current()) noexcept
+        template <typename Streamable>
+        void trace(const Streamable message, const std::experimental::source_location &source_location =
+                std::experimental::source_location::current())
         {
-            m_stream.print(message, source_location, "trace");
+            m_stream.print(message, source_location, SeverityLevel::trace);
         }
 
-        void debug(const char *message, const std::experimental::source_location &source_location = std::experimental::source_location::current()) noexcept
+        template <typename Streamable>
+        void debug(const Streamable message, const std::experimental::source_location &source_location =
+                std::experimental::source_location::current())
         {
-            m_stream.print(message, source_location, "debug");
+            m_stream.print(message, source_location, SeverityLevel::debug);
         }
 
-        void info(const char *message, const std::experimental::source_location &source_location = std::experimental::source_location::current()) noexcept
+        template <typename Streamable>
+        void info(const Streamable message, const std::experimental::source_location &source_location =
+                std::experimental::source_location::current())
         {
-            m_stream.print(message, source_location, "info");
+            m_stream.print(message, source_location, SeverityLevel::info);
         }
 
-        void warning(const char *message, const std::experimental::source_location &source_location = std::experimental::source_location::current()) noexcept
+        template <typename Streamable>
+        void warning(const Streamable message, const std::experimental::source_location &source_location =
+                std::experimental::source_location::current())
         {
-            m_stream.print(message, source_location, "warning");
+            m_stream.print(message, source_location, SeverityLevel::warning);
         }
 
-        void error(const char *message, const std::experimental::source_location &source_location = std::experimental::source_location::current()) noexcept
+        template <typename Streamable>
+        void error(const Streamable message, const std::experimental::source_location &source_location =
+                std::experimental::source_location::current())
         {
-            m_stream.print(message, source_location, "error");
+            m_stream.print(message, source_location, SeverityLevel::error);
         }
 
-        void critical(const char *message, const std::experimental::source_location &source_location = std::experimental::source_location::current()) noexcept
+        template <typename Streamable>
+        void critical(const Streamable message, const std::experimental::source_location &source_location =
+                std::experimental::source_location::current())
         {
-            m_stream.print(message, source_location, "critical");
+            m_stream.print(message, source_location, SeverityLevel::critical);
         }
 
     protected:
 
-        class MultiThreadStreamWrapper
+        class MultiThreadStreamWrapper : public WrapperWithMutex<std::ostream, std::mutex>
         {
         public:
-            explicit MultiThreadStreamWrapper(std::ostream &ostream) : m_ostream(ostream)
+            explicit MultiThreadStreamWrapper(std::ostream &ostream) : WrapperWithMutex<std::ostream, std::mutex>(ostream)
             {
-                if(!ostream)
+                if(!m_object)
                 {
                     throw kaktus::Exception("Given stream is not open.");
                 }
             }
-
-            void print(const char *message, const std::experimental::source_location &source_location, const char* severityLevel) noexcept
-            {
-                std::lock_guard<std::mutex> streamGuard(m_streamMutex);
-                formatColumnAndPrint(currentTime().c_str());
-                formatColumnAndPrint(std::this_thread::get_id());
-                formatColumnAndPrint(severityLevel);
-                formatColumnAndPrint(source_location.file_name());
-                formatColumnAndPrint(source_location.line());
-                formatColumnAndPrint(source_location.column());
-                formatColumnAndPrint(source_location.function_name());
-                formatColumnAndPrint(message);
-                m_ostream << std::endl;
-            }
-
-        protected:
-            static std::string currentTime() noexcept
-            {
-                const int bufferSize = 20;
-                char buffer[bufferSize];
-                std::time_t timeNow = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-                strftime(buffer, bufferSize, "%F %X", localtime(&timeNow));
-                return buffer;
-            }
-
             template <typename Streamable>
-            void formatColumnAndPrint(Streamable value) noexcept
+            void print(const Streamable message, const std::experimental::source_location &source_location,
+                    const SeverityLevel severityLevel)
             {
-                m_ostream << "[" << value << "]";
+                std::lock_guard<std::mutex> lockGuard(m_mutex);
+                formatToStream(m_object, time());
+                formatToStream(m_object, kaktus::to_string(severityLevel));
+                formatToStream(m_object, source_location.file_name());
+                formatToStream(m_object, source_location.line());
+                formatToStream(m_object, source_location.column());
+                formatToStream(m_object, source_location.function_name());
+                formatToStream(m_object, message);
+                m_object << std::endl;
             }
-
-            std::ostream &m_ostream;
-            std::mutex m_streamMutex;
         };
 
         kaktus::LoggerMultiThread::MultiThreadStreamWrapper m_stream;

@@ -13,21 +13,47 @@ namespace kaktus
     class Exception : public std::exception
     {
     public:
-        explicit Exception(const char* message, const std::experimental::source_location& source_location = std::experimental::source_location::current());
+        template <typename Streamable>
+        explicit Exception(const Streamable message, const std::experimental::source_location& source_location = std::experimental::source_location::current())
+        : m_message(message), m_source_location(source_location)
+        {
+            formatMessage();
+        }
         ~Exception() override = default;
 
         [[nodiscard]]
         const char *what() const noexcept override
         {
-            return m_finalMessage.c_str();
+            return m_prettyMessage.c_str();
+        }
+
+        std::string message() const noexcept
+        {
+            return m_message;
+        }
+        std::string prettyMessage() const noexcept
+        {
+            return m_prettyMessage;
         }
 
     protected:
-        void formatMessage();
+        void formatMessage()
+        {
+            //stringstream for some reason not working https://stackoverflow.com/questions/41854840/var-create-unable-to-create-variable-object
+            m_prettyMessage.append(m_source_location.file_name());
+            m_prettyMessage.append(m_delimiter);
+            m_prettyMessage.append(std::to_string(m_source_location.line()));
+            m_prettyMessage.append(m_delimiter);
+            m_prettyMessage.append(std::to_string(m_source_location.column()));
+            m_prettyMessage.append(m_delimiter);
+            m_prettyMessage.append(m_source_location.function_name());
+            m_prettyMessage.append(m_delimiter);
+            m_prettyMessage.append(m_message);
+        }
 
-        const char* m_message;
+        const std::string m_message;
         const char* m_delimiter = ":";
-        std::string m_finalMessage;
+        std::string m_prettyMessage;
         const std::experimental::source_location& m_source_location;
     };
 }

@@ -9,14 +9,16 @@
 class LoggerSingleThreadFixture : public ::testing::Test
 {
 protected:
+    using SingleThreadLogger = kaktus::LoggerSingleThread<std::string, std::ostream>;
     void SetUp() override
     {
-
+        m_logger = std::make_unique<SingleThreadLogger>(m_stringstream);
+        m_stringstream.str("");
     }
 
     void TearDown() override
     {
-
+        m_logger.reset();
     }
 
     std::string message()
@@ -34,8 +36,20 @@ protected:
         return m_severityLevel;
     }
 
-    kaktus::SeverityLevel m_severityLevel = kaktus::SeverityLevel::trace;
+    void logMessage()
+    {
+        m_logger->log(message(), severity(), dummy_source_location());
 
+        std::string result = m_stringstream.str();
+
+        std::cout << result << std::endl;
+        EXPECT_NE(result.find(formatToString(message())), std::string::npos);
+        EXPECT_NE(result.find(formatToString(kaktus::to_string(severity()))), std::string::npos);
+    }
+
+    kaktus::SeverityLevel m_severityLevel = kaktus::SeverityLevel::trace;
+    std::unique_ptr<SingleThreadLogger> m_logger;
+    std::stringstream m_stringstream;
 };
 
 
@@ -45,156 +59,30 @@ TEST_F(LoggerSingleThreadFixture, Constructor)
     std::ofstream ofstream("someFile", std::ios::out);
     std::ofstream emptyOfstream("", std::ios::out);
 
-    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread(stringstream));
-    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread);
-    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread(std::cerr));
-    EXPECT_NO_THROW(kaktus::LoggerSingleThread loggerSingleThread(ofstream));
-    EXPECT_THROW(kaktus::LoggerSingleThread loggerSingleThread(emptyOfstream), kaktus::Exception);
-    EXPECT_THROW(kaktus::LoggerSingleThread loggerSingleThread(emptyOfstream), std::exception);
+    EXPECT_NO_THROW(SingleThreadLogger loggerSingleThread(stringstream));
+    EXPECT_NO_THROW(SingleThreadLogger loggerSingleThread);
+    EXPECT_NO_THROW(SingleThreadLogger loggerSingleThread(std::cerr));
+    EXPECT_NO_THROW(SingleThreadLogger loggerSingleThread(ofstream));
+    EXPECT_THROW(SingleThreadLogger loggerSingleThread(emptyOfstream), kaktus::Exception);
+    EXPECT_THROW(SingleThreadLogger loggerSingleThread(emptyOfstream), std::exception);
 
 }
 
-TEST_F(LoggerSingleThreadFixture, trace)
+TEST_F(LoggerSingleThreadFixture, log)
 {
     severity(kaktus::SeverityLevel::trace);
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerSingleThread>(message(),
-                                               severity(),
-                                               [&](kaktus::LoggerSingleThread &logger) {
-                logger.trace(message());
-            });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
-                                                severity(),
-                                                [&](kaktus::LoggerSingleThread &logger) {
-                logger.trace(message(), dummy_source_location());
-            });
-}
-
-TEST_F(LoggerSingleThreadFixture, debug)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::debug);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerSingleThread>(message(),
-                                                severity(),
-                                                [&](kaktus::LoggerSingleThread &logger) {
-                logger.debug(message());
-            });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
-                                                severity(),
-                                                [&](kaktus::LoggerSingleThread &logger) {
-                logger.debug(message(), dummy_source_location());
-            });
-}
-
-TEST_F(LoggerSingleThreadFixture, info)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::info);
-
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerSingleThread>(message(),
-                                               severity(),
-                                               [&](kaktus::LoggerSingleThread &logger) {
-                logger.info(message());
-            });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
-                                                severity(),
-                                                [&](kaktus::LoggerSingleThread &logger) {
-                logger.info(message(), dummy_source_location());
-            });
-}
-
-TEST_F(LoggerSingleThreadFixture, warning)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::warning);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerSingleThread>(message(),
-                                               severity(),
-                                               [&](kaktus::LoggerSingleThread &logger) {
-                logger.warning(message());
-            });
-
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
-                                                severity(),
-                                                [&](kaktus::LoggerSingleThread &logger) {
-                logger.warning(message(), dummy_source_location());
-            });
-}
-
-TEST_F(LoggerSingleThreadFixture, error)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::error);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerSingleThread>(message(),
-                                               severity(),
-                                               [&](kaktus::LoggerSingleThread &logger) {
-                logger.error(message());
-            });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
-                                                severity(),
-                                                [&](kaktus::LoggerSingleThread &logger) {
-                logger.error(message(), dummy_source_location());
-            });
-}
-
-TEST_F(LoggerSingleThreadFixture, critical)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::critical);
+    EXPECT_NO_THROW(logMessage());
+    severity(kaktus::SeverityLevel::debug);
+    EXPECT_NO_THROW(logMessage());
 
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerSingleThread>(message(),
-                                               severity(),
-                                               [&](kaktus::LoggerSingleThread &logger) {
-                logger.critical(message());
-            });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerSingleThread>(message(),
-                                                severity(),
-                                                [&](kaktus::LoggerSingleThread &logger) {
-                logger.critical(message(), dummy_source_location());
-            });
 }

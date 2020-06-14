@@ -6,31 +6,61 @@
 #include <fstream>
 #include <thread>
 
+using MultiThreadLogger = kaktus::LoggerMultiThread<std::string, std::ostream>;
+
+void threadMain(unsigned int iterationLimit, kaktus::SeverityLevel severityLevel,
+                MultiThreadLogger &logger)
+{
+    std::string message("some message");
+    for (unsigned int current = 0; current < iterationLimit; current++)
+    {
+        logger.log(message, severityLevel, dummy_source_location());
+    }
+}
+
 class LoggerMultiThreadFixture : public ::testing::Test
 {
 protected:
     void SetUp() override
     {
-
+        m_logger = std::make_unique<MultiThreadLogger>(m_stringstream);
+        m_stringstream.str("");
     }
+
     void TearDown() override
     {
-
+        m_logger.reset();
     }
+
     std::string message()
     {
         return kaktus::to_string(m_severityLevel).append(" message");
     }
+
     void severity(kaktus::SeverityLevel severityLevel)
     {
         m_severityLevel = severityLevel;
     }
+
     auto severity()
     {
         return m_severityLevel;
     }
-    kaktus::SeverityLevel m_severityLevel = kaktus::SeverityLevel::trace;
 
+    void logMessage()
+    {
+        m_logger->log(message(), severity(), dummy_source_location());
+
+        std::string result = m_stringstream.str();
+
+        std::cout << result << std::endl;
+        EXPECT_NE(result.find(formatToString(message())), std::string::npos);
+        EXPECT_NE(result.find(formatToString(kaktus::to_string(severity()))), std::string::npos);
+    }
+
+    kaktus::SeverityLevel m_severityLevel = kaktus::SeverityLevel::trace;
+    std::unique_ptr<MultiThreadLogger> m_logger;
+    std::stringstream m_stringstream;
 };
 
 TEST_F(LoggerMultiThreadFixture, Constructor)
@@ -39,239 +69,71 @@ TEST_F(LoggerMultiThreadFixture, Constructor)
     std::ofstream ofstream("someFile", std::ios::out);
     std::ofstream emptyOfstream("", std::ios::out);
 
-    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread(stringstream));
-    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread);
-    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread(std::cerr));
-    EXPECT_NO_THROW(kaktus::LoggerMultiThread loggerMultiThread(ofstream));
-    EXPECT_THROW(kaktus::LoggerMultiThread loggerMultiThread(emptyOfstream), kaktus::Exception);
-    EXPECT_THROW(kaktus::LoggerMultiThread loggerMultiThread(emptyOfstream), std::exception);
+    EXPECT_NO_THROW( MultiThreadLogger loggerMultiThread(stringstream));
+    EXPECT_NO_THROW(MultiThreadLogger loggerMultiThread);
+    EXPECT_NO_THROW(MultiThreadLogger loggerMultiThread(std::cerr));
+    EXPECT_NO_THROW(MultiThreadLogger loggerMultiThread(ofstream));
+    EXPECT_THROW(MultiThreadLogger loggerMultiThread(emptyOfstream), kaktus::Exception);
+    EXPECT_THROW(MultiThreadLogger loggerMultiThread(emptyOfstream), std::exception);
 
 }
 
 TEST_F(LoggerMultiThreadFixture, trace)
 {
     severity(kaktus::SeverityLevel::trace);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.trace(message());
-    });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.trace(message(), dummy_source_location());
-    });
-}
-
-TEST_F(LoggerMultiThreadFixture, debug)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::debug);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.debug(message());
-    });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.debug(message(), dummy_source_location());
-    });
-}
-
-TEST_F(LoggerMultiThreadFixture, info)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::info);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.info(message());
-    });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.info(message(), dummy_source_location());
-    });
-}
-
-TEST_F(LoggerMultiThreadFixture, warning)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::warning);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.warning(message());
-    });
-
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.warning(message(), dummy_source_location());
-    });
-}
-
-TEST_F(LoggerMultiThreadFixture, error)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::error);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.error(message());
-    });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.error(message(), dummy_source_location());
-    });
-}
-
-TEST_F(LoggerMultiThreadFixture, critical)
-{
+    EXPECT_NO_THROW(logMessage());
     severity(kaktus::SeverityLevel::critical);
-
-    //
-    // Default logging
-    //
-    testDefaultLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.critical(message());
-    });
-
-    //
-    // Full logging with mocking source_location
-    //
-
-    testAdvancedLog<kaktus::LoggerMultiThread>(message(), severity(), [&](kaktus::LoggerMultiThread &logger) {
-        logger.critical(message(), dummy_source_location());
-    });
+    EXPECT_NO_THROW(logMessage());
+    severity(kaktus::SeverityLevel::debug);
+    EXPECT_NO_THROW(logMessage());
 }
+
 
 TEST_F(LoggerMultiThreadFixture, multipleThreads)
 {
-    const unsigned int iterationLimit = 100; //higher count with bad or without mutex can cause crash
+    unsigned int iterationLimit = 10000; //higher count with bad or without mutex can cause crash
     std::stringstream sstream;
-    kaktus::LoggerMultiThread logger(sstream);
+    MultiThreadLogger logger(sstream);
 
-    //
-    // Prepare lambdas for threads
-    //
-
-    auto criticalLambda([&]() -> void {
-        testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-            logger.critical(message);
-        });
-    });
-
-    auto errorLambda([&]() -> void {
-        testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-            logger.error(message);
-        });
-    });
-
-    auto warningLambda([&]() -> void {
-        testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-            logger.warning(message);
-        });
-    });
-
-    auto infoLambda([&]() -> void {
-        testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-            logger.info(message);
-        });
-    });
-
-    auto debugLambda([&]() -> void {
-        testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-            logger.debug(message);
-        });
-    });
-
-    auto traceLambda([&]() -> void {
-        testThreadMainFunction(iterationLimit, logger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-            logger.trace(message);
-        });
-    });
+    const unsigned int singleIteration = 1;
+    std::stringstream singleLine;
+    std::vector<unsigned int> charactersInSingleLine;
+    std::vector<kaktus::SeverityLevel> severityLevels{
+            kaktus::SeverityLevel::critical,
+            kaktus::SeverityLevel::error,
+            kaktus::SeverityLevel::warning,
+            kaktus::SeverityLevel::info,
+            kaktus::SeverityLevel::debug,
+            kaktus::SeverityLevel::trace
+    };
 
     //
     // getting character counts for single iteration
     //
 
-    const unsigned int singleIteration = 1;
-    std::stringstream singleLine;
-    kaktus::LoggerMultiThread testerLogger(singleLine);
-    testThreadMainFunction(singleIteration, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-        logger.critical(message);
-    });
+    for(const auto level : severityLevels)
+    {
+        MultiThreadLogger testerLogger(singleLine);
+        threadMain(singleIteration, level, testerLogger);
 
-    unsigned int charactersInSingleCriticalLine = singleLine.str().length();
-    singleLine.str(std::string());
+        charactersInSingleLine.push_back(singleLine.str().length());
+        singleLine.str(std::string());
+    }
 
-    testThreadMainFunction(singleIteration, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-        logger.error(message);
-    });
-
-    unsigned int charactersInSingleErrorLine = singleLine.str().length();
-    singleLine.str(std::string());
-
-    testThreadMainFunction(singleIteration, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-        logger.warning(message);
-    });
-
-    unsigned int charactersInSingleWarningLine = singleLine.str().length();
-    singleLine.str(std::string());
-
-    testThreadMainFunction(singleIteration, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-        logger.info(message);
-    });
-
-    unsigned int charactersInSingleInfoLine = singleLine.str().length();
-    singleLine.str(std::string());
-
-    testThreadMainFunction(singleIteration, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-        logger.debug(message);
-    });
-
-    unsigned int charactersInSingleDebugLine = singleLine.str().length();
-    singleLine.str(std::string());
-
-    testThreadMainFunction(singleIteration, testerLogger, [&](kaktus::LoggerMultiThread &logger, const std::string &message) {
-        logger.trace(message);
-    });
-
-    unsigned int charactersInSingleTraceLine = singleLine.str().length();
-    singleLine.str(std::string());
-
-    unsigned int expectedCharacterCount = iterationLimit *
-            (charactersInSingleCriticalLine +
-            charactersInSingleErrorLine +
-            charactersInSingleWarningLine +
-            charactersInSingleInfoLine +
-            charactersInSingleDebugLine +
-            charactersInSingleTraceLine);
-
+    unsigned int expectedCharacterCount = 0;
+    for(const auto count : charactersInSingleLine)
+    {
+        expectedCharacterCount += count;
+    }
+    expectedCharacterCount *= iterationLimit;
     std::cout << "Expected characters: " << expectedCharacterCount << std::endl;
 
     //
@@ -280,12 +142,12 @@ TEST_F(LoggerMultiThreadFixture, multipleThreads)
 
     try
     {
-        std::thread critical(criticalLambda);
-        std::thread error(errorLambda);
-        std::thread warning(warningLambda);
-        std::thread info(infoLambda);
-        std::thread debug(debugLambda);
-        std::thread trace(traceLambda);
+        std::thread critical(threadMain, iterationLimit, kaktus::SeverityLevel::critical, std::ref(logger));
+        std::thread error(threadMain, iterationLimit, kaktus::SeverityLevel::error, std::ref(logger));
+        std::thread warning(threadMain, iterationLimit, kaktus::SeverityLevel::warning, std::ref(logger));
+        std::thread info(threadMain, iterationLimit, kaktus::SeverityLevel::info, std::ref(logger));
+        std::thread debug(threadMain, iterationLimit, kaktus::SeverityLevel::debug, std::ref(logger));
+        std::thread trace(threadMain, iterationLimit, kaktus::SeverityLevel::trace, std::ref(logger));
 
 
         critical.join();

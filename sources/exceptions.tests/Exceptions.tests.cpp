@@ -15,6 +15,7 @@ TEST(Exception, RaiseException)
     catch (std::exception &exception)
     {
         std::string errorMessage(exception.what());
+        std::cout << errorMessage << std::endl;
         EXPECT_FALSE(errorMessage.empty());
     }
 
@@ -25,6 +26,7 @@ TEST(Exception, RaiseException)
     catch (std::exception &exception)
     {
         std::string errorMessage(exception.what());
+        std::cout << errorMessage << std::endl;
         EXPECT_FALSE(errorMessage.empty());
     }
 }
@@ -39,6 +41,7 @@ TEST(Exception, Message)
     catch (std::exception &exception)
     {
         std::string raisedErrorMessage(exception.what());
+        std::cout << raisedErrorMessage << std::endl;
         ASSERT_NE(raisedErrorMessage.find(errorMessage), std::string::npos);
     }
 }

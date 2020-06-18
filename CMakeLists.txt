@@ -13,10 +13,13 @@ set_target_properties(exception PROPERTIES LINKER_LANGUAGE CXX) ### uncomment wh
 
 add_library(wrapper-with-mutex STATIC sources/mutex-wrappers/WrapperWithMutex.hpp sources/mutex-wrappers/WrapperWithGivenMutex.hpp)
 set_target_properties(wrapper-with-mutex  PROPERTIES LINKER_LANGUAGE CXX)
+
 add_library(guarded-object STATIC sources/mutex-wrappers/GuardedObject.hpp)
 set_target_properties(guarded-object PROPERTIES LINKER_LANGUAGE CXX)
+
 add_library(logger-single-thread STATIC sources/loggers/LoggerSingleThread.hpp sources/loggers/SeverityLevel.hpp sources/loggers/LoggerFunctions.hpp sources/loggers/ILogger.hpp)
 set_target_properties(logger-single-thread  PROPERTIES LINKER_LANGUAGE CXX)
+
 add_library(logger-multi-thread STATIC sources/loggers/LoggerMultiThread.hpp sources/loggers/SeverityLevel.hpp sources/loggers/LoggerFunctions.hpp sources/loggers/ILogger.hpp)
 set_target_properties(logger-multi-thread PROPERTIES LINKER_LANGUAGE CXX)
 

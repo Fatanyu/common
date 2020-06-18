@@ -4,6 +4,12 @@
 #include <string>
 #include <experimental/source_location>
 #include <sstream>
+#include <concepts>
+
+using namespace std::string_literals;
+
+//template <typename T>
+//concept Streamable = std::is_convertible<std::string>;
 
 namespace kaktus
 {
@@ -52,7 +58,7 @@ namespace kaktus
         }
 
         const std::string m_message;
-        const char* m_delimiter = ":";
+        const std::string m_delimiter = ":"s;
         std::string m_prettyMessage;
         const std::experimental::source_location& m_source_location;
     };

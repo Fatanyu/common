@@ -5,6 +5,7 @@
 #include <experimental/source_location>
 #include <sstream>
 #include <concepts>
+#include <codecvt>
 
 using namespace std::string_literals;
 
@@ -33,15 +34,31 @@ namespace kaktus
             return m_prettyMessage.c_str();
         }
 
+        [[nodiscard]]
         std::string message() const noexcept
         {
             return m_message;
         }
+
+        [[nodiscard]]
         std::string prettyMessage() const noexcept
         {
             return m_prettyMessage;
         }
 
+        [[nodiscard]]
+        std::wstring wmessage() const noexcept
+        {
+            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+            return converter.from_bytes(m_message);
+        }
+
+        [[nodiscard]]
+        std::wstring wprettyMessage() const noexcept
+        {
+            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+            return converter.from_bytes(m_prettyMessage);
+        }
     protected:
         void formatMessage()
         {

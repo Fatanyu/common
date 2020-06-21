@@ -45,6 +45,9 @@ protected:
         std::cout << result << std::endl;
         EXPECT_NE(result.find(formatToString(message())), std::string::npos);
         EXPECT_NE(result.find(formatToString(kaktus::to_string(severity()))), std::string::npos);
+
+        m_logger->log("I should too be logged.", kaktus::SeverityLevel::critical, dummy_source_location()); //std::string logger, char* message
+
     }
 
     kaktus::SeverityLevel m_severityLevel = kaktus::SeverityLevel::trace;

@@ -15,7 +15,7 @@ namespace kaktus
     class LoggerSingleThread : public ILogger<Streamable>
     {
     public:
-        explicit LoggerSingleThread(Stream &stream = std::cout) : m_stream(stream)
+        explicit LoggerSingleThread(Stream &stream = std::clog) : m_stream(stream)
         {
             if(!stream)
             {

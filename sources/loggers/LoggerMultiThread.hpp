@@ -19,7 +19,7 @@ namespace kaktus
     class LoggerMultiThread : public ILogger<Streamable>
     {
     public:
-        explicit LoggerMultiThread(Stream &stream = std::cout) : m_stream({stream})
+        explicit LoggerMultiThread(Stream &stream = std::clog) : m_stream({stream})
         {
             if(!stream)
             {
